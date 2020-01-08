@@ -2,6 +2,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, User
 from django import forms
 from django.contrib.auth.models import User
 
+from home.models import File, Image
+
 
 class SignUpForm(UserCreationForm):
     name = forms.CharField(max_length=30, required=True)
@@ -28,3 +30,13 @@ class CustomAuthenticationForm(AuthenticationForm):
 class Login_form(forms.Form):
     username = forms.CharField(label='Reg. No. :', max_length=20)
     password = forms.CharField(widget=forms.PasswordInput)
+
+class FileForm(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = ('file_name','doc')
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = Image
+        fields = ('img_name','img')

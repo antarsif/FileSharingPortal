@@ -4,14 +4,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import forms
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views import generic
 
 from home.forms import *
-from home.models import Course
+from home.models import Course, File, Image
 
 '''
 class HomeView(generic.FormView):
@@ -101,9 +101,8 @@ def home(request):
             email = signup_form.cleaned_data.get('email')
             try:
                 user = User.objects.create_user(username=username,email=email,password=password1)
-                user.set_password(password1)
-                #login(request, user)
-                user.save();
+                user.save()
+                login(request, user)
             except:
                 pass
             return redirect('home:home')
@@ -124,3 +123,31 @@ def home(request):
     return render(request,'home/base_home.html',context)
 
 
+class RegView(generic.RedirectView):
+    permanent = False
+    query_string = True
+    pattern_name = 'home:register'
+
+    def get_redirect_url(self, *args, **kwargs):
+        crs = get_object_or_404(Course, pk=kwargs['pk'])
+        print(crs.members.all())
+        crs.register(self.request.user)
+        return super().get_redirect_url(*args, **kwargs)
+
+
+class CourseView(generic.TemplateView):
+    template_name = 'home/course.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        crs = get_object_or_404(Course, pk=kwargs['pk'])
+        file = File.objects.order_by('uploaded_at').filter(course=crs)
+        img = Image.objects.order_by('uploaded_at').filter(course=crs)
+        print(crs.admin, self.request.user)
+        context['logger'] = self.request.user
+        context['course'] = crs
+        context['files'] = file
+        context['images'] = img
+        context['fform'] = FileForm
+        context['iform'] = ImageForm
+        return context

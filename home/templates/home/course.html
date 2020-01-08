@@ -1,0 +1,63 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'home/bootstrap-4.3.1-dist/bootstrap-4.3.1-dist/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'home/bootstrap-4.3.1-dist/bootstrap-4.3.1-dist/css/bootstrap.css' %}">
+<link rel="icon" href="{% static 'home/images/logo.png' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="{% static 'home/bootstrap-4.3.1-dist/bootstrap-4.3.1-dist/js/bootstrap.min.js' %}"></script>
+
+<div class="jumbotron text-center" style="margin-bottom:0">
+<h2 align="center">File Sharing Portal</h2>
+</div>
+{% block  messages %}
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}
+{% block lcol %}
+    <div class="col-sm-8 border border-dark bg-white rounded">
+<h2 class="sticky-top subhead">{{ course.name }}</h2>
+    <div class="row1 pre-scrollable bg-light">
+{% if files %}
+{% for file in Files %}
+    <div class="container1 darker1">
+  <h5 style="text-decoration: underline">{{ file.file_name }}</h5>
+  <p>{{ file.doc }}</p>
+  <span class="time-right">{{ file.uploaded_at }}</span>
+</div>
+{% endfor %}
+    {% endif %}
+    {% if images %}
+    {% for img in images %}
+    <div class="container1 darker1">
+  <h5 style="text-decoration: underline">{{ img.img_name }}</h5>
+  <p>{{ img.img }}</p>
+  <span class="time-right">{{ img.uploaded_at }}</span>
+</div>
+{% endfor %}
+    {% endif %}
+    </div>
+    <div class="row1 bg-light" style="color: black">
+        {% if course.admin == logger %}
+        <p>Add content</p>
+    <form method="post" novalidate class="form-check-">
+  {% csrf_token %}
+    {{ fform.as_p }}
+  <button type="submit" class="btn btn-primary">Add File</button>
+</form>
+            <form method="post" novalidate class="form-check-">
+  {% csrf_token %}
+    {{ iform.as_p }}
+  <button type="submit" class="btn btn-primary">Add File</button>
+</form>
+        {% endif %}
+    </div>
+    </div>
+
+    {% endblock %}
+{% block rcol %}
+
+{% endblock %}

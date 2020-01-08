@@ -16,6 +16,7 @@
 </div>
 <div class="row">
 {% if not user.is_authenticated %}
+    {% block lcol %}
     <div class="col-sm-3">
     </div>
     <div class="col-sm-3 border border-dark rounded">
@@ -27,6 +28,7 @@
         </form>
     <a href="#">Forgot Password?</a>
     </div>
+    {% endblock %}
     <div class="col-sm-3 border border-dark rounded">
         <h2>Signup</h2>
         <form method="post">
@@ -66,8 +68,8 @@
     <h2 class="sticky-top subhead">Courses Available</h2>
     <ul>
     {% for crs in courses %}
-        <li style="margin-bottom: auto"><div style="color: black"><div class="btn btn-link bg-white bar border border-dark" style="color: black"> {{ crs.name }}</div>
-            <a href="#" class="btn btn-link bg-primary" style="color: white">Register</a></div></li>
+        <li style="margin-bottom: auto"><div style="color: black"><a href="{% url 'home:course_home' crs.id %}" class="btn btn-link bg-white bar border border-dark" style="color: black"> {{ crs.name }}</a>
+            <a href="{% url 'home:register' crs.id %}" class="btn btn-link bg-primary" style="color: white">Register</a></div></li>
     {% endfor %}
     </ul>
     {% else %}
