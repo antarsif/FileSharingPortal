@@ -34,9 +34,9 @@ class Login_form(forms.Form):
 class FileForm(forms.ModelForm):
     class Meta:
         model = File
-        fields = ('file_name','doc')
+        fields = ('file_name','doc','course')
 
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
-        fields = ('img_name','img')
+        fields = ('img_name','img','course')

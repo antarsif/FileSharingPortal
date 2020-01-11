@@ -54,7 +54,7 @@ class File(models.Model):
         return self.file_name
 
 class Image(models.Model):
-    img = models.ImageField(verbose_name="Content", upload_to='files/')
+    img = models.ImageField(verbose_name="Content", upload_to='images/')
     img_name = models.CharField(verbose_name='File Name', blank=True,max_length=25)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

@@ -22,10 +22,9 @@
 <h2 class="sticky-top subhead">{{ course.name }}</h2>
     <div class="row1 pre-scrollable bg-light">
 {% if files %}
-{% for file in Files %}
+{% for file in files %}
     <div class="container1 darker1">
-  <h5 style="text-decoration: underline">{{ file.file_name }}</h5>
-  <p>{{ file.doc }}</p>
+        <h5 style="text-decoration: underline"><a href="/media/{{ file.doc }}">{{ file.file_name }}</a></h5>
   <span class="time-right">{{ file.uploaded_at }}</span>
 </div>
 {% endfor %}
@@ -43,12 +42,12 @@
     <div class="row1 bg-light" style="color: black">
         {% if course.admin == logger %}
         <p>Add content</p>
-    <form method="post" novalidate class="form-check-">
+    <form method="post" novalidate class="form-check-" enctype="multipart/form-data">
   {% csrf_token %}
     {{ fform.as_p }}
   <button type="submit" class="btn btn-primary">Add File</button>
 </form>
-            <form method="post" novalidate class="form-check-">
+            <form method="post" novalidate class="form-check-" enctype="multipart/form-data">
   {% csrf_token %}
     {{ iform.as_p }}
   <button type="submit" class="btn btn-primary">Add File</button>

@@ -134,20 +134,45 @@ class RegView(generic.RedirectView):
         crs.register(self.request.user)
         return super().get_redirect_url(*args, **kwargs)
 
-
+'''
 class CourseView(generic.TemplateView):
     template_name = 'home/course.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        crs = get_object_or_404(Course, pk=kwargs['pk'])
-        file = File.objects.order_by('uploaded_at').filter(course=crs)
-        img = Image.objects.order_by('uploaded_at').filter(course=crs)
+         = super().get_context_data(**kwargs)
+
         print(crs.admin, self.request.user)
-        context['logger'] = self.request.user
-        context['course'] = crs
-        context['files'] = file
-        context['images'] = img
-        context['fform'] = FileForm
-        context['iform'] = ImageForm
-        return context
+        'logger':self.request.user
+        'course':crs
+        'files':file
+        'images':img
+        'fform':FileForm
+        'iform':ImageForm
+        return
+'''
+
+def fileupload(request,pk):
+    crs = Course.objects.get(pk=pk)
+    print(crs)
+    file = File.objects.order_by('uploaded_at').filter(course=crs)
+    print(file)
+    img = Image.objects.order_by('uploaded_at').filter(course=crs)
+    if request.method == 'POST':
+        print("here")
+        form = FileForm(request.POST, request.FILES)
+        form.course = crs
+        if form.is_valid():
+            form.save()
+            print("uploaded")
+            #messages.success("Uploaded successfully")
+            return redirect('home:course_home')
+    else:
+        form = FileForm()
+    return render(request, 'home/course.html', {
+        'form': form,'logger':request.user,
+        'course':crs,
+        'files':file,
+        'images':img,
+        'fform':FileForm,
+        'iform':ImageForm,
+    })
